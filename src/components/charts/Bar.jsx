@@ -8,6 +8,17 @@ class Bar extends React.Component {
         this.state = {};
     }
 
+    getTemperatures = (city) => {
+        const temperatures = [];
+        for (let i = this.props.minYear; i <= this.props.maxYear; i++) {
+            temperatures.push(0);
+        }
+        city.annualTemperatureDTOs.forEach(x => {
+            temperatures[x.year - this.props.minYear] = x.temperature;
+        });
+        return temperatures;
+    }
+
     render() {
         const { data, minYear, maxYear, type } = this.props;
         const years = Array.from(new Array(maxYear - minYear + 1), (x,i) => i + minYear);
@@ -16,9 +27,10 @@ class Bar extends React.Component {
             labels: years,
             datasets: data.map((city, index) => {
                 const backgroundColor = index < backgroundColors.length ? backgroundColors[index] : '';
+                
                 return {
                     label: city.city,
-                    data: city.annualTemperatureDTOs.map(x => x.temperature),
+                    data: this.getTemperatures(city),
                     fill: false,
                     borderColor: backgroundColor,
                     backgroundColor
@@ -33,7 +45,12 @@ class Bar extends React.Component {
                     ticks: {
                         beginAtZero: true
                     }
-                }]
+                }],
+                xAxes: [{
+                    ticks: {
+                      maxTicksLimit: 10
+                    }
+                  }]
             }
         };
 

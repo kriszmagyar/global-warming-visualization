@@ -46,6 +46,10 @@ class CitiesPage extends React.Component {
         })
     }
 
+    getBarData() {
+        return this.state.data;
+    }
+
     render() {
         if (!this.state.init) return "Loading...";
         return (
@@ -72,10 +76,10 @@ class CitiesPage extends React.Component {
                     </Grid>
                     <Grid container spacing={2} style={{margin: "20px 0"}}>
                         <Grid item xs={12} sm={6}>
-                            <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} type="bar" />
+                            <Bar data={this.getBarData()} minYear={this.state.minYear} maxYear={this.state.maxYear} type="bar" />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} type="line" /> 
+                            <Bar data={this.getBarData()} minYear={this.state.minYear} maxYear={this.state.maxYear} type="line" /> 
                         </Grid>
                     </Grid>
                 </Paper>
