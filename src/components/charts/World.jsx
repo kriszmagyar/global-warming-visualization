@@ -14,7 +14,6 @@ class World extends React.Component {
         chart.panBehavior = "rotateLongLat";
 
         var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
-        worldSeries.exclude = ["AQ"];
         worldSeries.useGeodata = true;
 
         // Country lines
@@ -34,7 +33,33 @@ class World extends React.Component {
         chart.backgroundSeries.mapPolygons.template.polygon.fill = am4core.color("#aadaff");
         chart.backgroundSeries.mapPolygons.template.polygon.fillOpacity = 1;
 
+        // Dots on the map
+        let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+        let imageSeriesTemplate = imageSeries.mapImages.template;
+        imageSeriesTemplate.propertyFields.latitude = "latitude";
+        imageSeriesTemplate.propertyFields.longitude = "longitude";
+
+        let circle = imageSeriesTemplate.createChild(am4core.Circle);
+        circle.radius = 7;
+        circle.fill = am4core.color("#B27799");
+        circle.nonScaling = true;
+        circle.tooltipText = "{title}, {value}C°";
+
+        imageSeries.heatRules.push({
+            target: circle,
+            property: "fill",
+            min: am4core.color("#082284"),
+            max: am4core.color("#f54029")
+        });
+
+        imageSeries.data = this.props.data;
+
         this.chart = chart;
+        this.imageSeries = imageSeries;
+    }
+
+    componentDidUpdate() {
+        this.imageSeries.data = this.props.data;
     }
     
     componentWillUnmount() {
