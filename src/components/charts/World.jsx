@@ -1,6 +1,7 @@
 import React from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
+import * as am4charts from "@amcharts/amcharts4/charts";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
 
 class World extends React.Component {
@@ -49,8 +50,16 @@ class World extends React.Component {
             target: circle,
             property: "fill",
             min: am4core.color("#082284"),
-            max: am4core.color("#f54029")
+            max: am4core.color("#f54029"),
+            minValue: -30,
+            maxValue: 50
         });
+
+        let heatLegend = chart.createChild(am4charts.HeatLegend);
+        heatLegend.series = imageSeries;
+        heatLegend.orientation = "vertical";
+        heatLegend.minValue = -30;
+        heatLegend.maxValue = 50;
 
         imageSeries.data = this.props.data;
 
@@ -70,7 +79,7 @@ class World extends React.Component {
     
     render() {
         return (
-            <div id="worldDiv" style={{ width: "100%", height: "620px" }}></div>
+            <div id="worldDiv" style={{ width: "100%", height: "620px", marginTop: "10px" }}></div>
         );
     }
 }
