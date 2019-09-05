@@ -24,7 +24,16 @@ class Bar extends React.Component {
             })
         };
 
-        const options = {};
+        const options = {
+            legend: { position: 'right' },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        };
 
         return (
             <BarChartJs data={convertedData} options={options} />

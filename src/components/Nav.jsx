@@ -27,7 +27,7 @@ function Nav() {
                         <Link to="/">Global Warming</Link>
                     </Typography>
                     <Button color="inherit">
-                        <Link to="/station">Station</Link>
+                        <Link to="/cities">Cities</Link>
                     </Button>
                 </Toolbar>
             </AppBar>
