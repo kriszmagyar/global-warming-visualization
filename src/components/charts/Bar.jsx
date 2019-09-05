@@ -4,40 +4,29 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 
 class Bar extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+
     componentDidMount() {
         let chart = am4core.create("chartdiv", am4charts.XYChart);
-    
-        chart.paddingRight = 30;
+        chart.data = this.handleData();
 
-        let data = [];
-        let visits = 10;
-        for (let i = 1; i < 366; i++) {
-            visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-            data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
-        }
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "year";
 
-        chart.data = data;
-
-        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.grid.template.location = 0;
-
+        // eslint-disable-next-line
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-        valueAxis.tooltip.disabled = true;
-        valueAxis.renderer.minWidth = 35;
 
-        let series = chart.series.push(new am4charts.LineSeries());
-        series.dataFields.dateX = "date";
-        series.dataFields.valueY = "value";
-
-        series.tooltipText = "{valueY.value}";
-        chart.cursor = new am4charts.XYCursor();
-
-        let scrollbarX = new am4charts.XYChartScrollbar();
-        scrollbarX.series.push(series);
-        chart.scrollbarX = scrollbarX;
+        this.updateSeries(chart);
     
         this.chart = chart;
     }
+
+    componentDidUpdate() {
+        this.chart.data = this.props.data;
+      }
 
     componentWillUnmount() {
         if (this.chart) {
@@ -45,9 +34,27 @@ class Bar extends React.Component {
         }
     }
 
+    handleData() {
+        return this.props.data;
+    }
+
+    updateSeries(chart) {
+        this.props.selectedCities.forEach(city => {
+            let series1 = chart.series.push(new am4charts.ColumnSeries());
+            series1.dataFields.valueY = this.formatCityName(city);
+            series1.dataFields.categoryX = "year";
+            series1.name = city;
+            series1.columns.template.tooltipText = city + ": [bold]{valueY}[/] C°";
+        });
+    }
+
+    formatCityName(name) {
+        return name.replace(" ", "").toLowerCase();
+    }
+
     render() {
         return (
-            <div id="chartdiv" style={{ width: "100%", height: "600px" }}></div>
+            <div id="chartdiv" style={{ width: "100%", height: "590px" }}></div>
         );
     }
 
