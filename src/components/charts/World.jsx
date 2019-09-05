@@ -40,7 +40,7 @@ class World extends React.Component {
         circle.radius = 7;
         circle.fill = am4core.color("#B27799");
         circle.nonScaling = true;
-        circle.tooltipText = "{title}, {value}C°";
+        circle.tooltipText = "{city}, {value}C°";
 
         imageSeries.heatRules.push({
             target: circle,

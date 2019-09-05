@@ -33,17 +33,17 @@ class WorldPage extends React.Component {
         return [{
             "latitude": 48.856614,
             "longitude": 2.352222,
-            "title": "Paris",
+            "city": "Paris",
             "value": 30
           }, {
             "latitude": 40.712775,
             "longitude": -74.005973,
-            "title": "New York",
+            "city": "New York",
             "value": 10
           }, {
             "latitude": 49.282729,
             "longitude": -123.120738,
-            "title": "Vancouver",
+            "city": "Vancouver",
             "value": 50
         }];
     }

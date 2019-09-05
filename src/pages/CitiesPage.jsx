@@ -7,7 +7,8 @@ import '../assets/css/slider.css';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import config from "../config";
-import Typography from '@material-ui/core/Typography';
+import axios from "axios";
+import qs from "qs";
 
 class CitiesPage extends React.Component {
 
@@ -17,69 +18,35 @@ class CitiesPage extends React.Component {
             init: false,
             data: [],
             selectedCities: ["Budapest"],
-            options: ["New York", "London", "Vienna", "Budapest"],
+            options: ["New York", "London", "Vienna", "Budapest", "Warsaw"],
             minYear: config.MIN_YEAR,
             maxYear: config.MAX_YEAR
         };
     }
 
     componentDidMount() {
-        const data = this.getData().filter(x => {
-            return this.state.selectedCities.includes(x.city);
+        this.getData(this.state.selectedCities, data => {
+            this.setState({ data, init: true });
         });
-        this.setState({ data, init: true });
     }
 
-    getData() {
-
-        return [{
-            city: "Budapest",
-            values: [
-                { year: 1975, celsius: 30 },
-                { year: 1976, celsius: 32 },
-                { year: 1977, celsius: 34 },
-                { year: 1978, celsius: 31 },
-                { year: 1979, celsius: 29 },
-                { year: 1980, celsius: 25 }
-            ]
-        }, {
-            city: "London",
-            values: [
-                { year: 1975, celsius: 30 },
-                { year: 1976, celsius: 32 },
-                { year: 1977, celsius: 34 },
-                { year: 1978, celsius: 31 },
-                { year: 1979, celsius: 29 },
-                { year: 1980, celsius: 25 }
-            ]
-        }, {
-            city: "Vienna",
-            values: [
-                { year: 1975, celsius: 30 },
-                { year: 1976, celsius: 32 },
-                { year: 1977, celsius: 34 },
-                { year: 1978, celsius: 31 },
-                { year: 1979, celsius: 29 },
-                { year: 1980, celsius: 25 }
-            ]
-        }, {
-            city: "New York",
-            values: [
-                { year: 1975, celsius: 30 },
-                { year: 1976, celsius: 32 },
-                { year: 1977, celsius: 34 },
-                { year: 1978, celsius: 31 },
-                { year: 1979, celsius: 29 },
-                { year: 1980, celsius: 25 }
-            ]
-        }]
+    getData(values, cb) {
+        axios.get("https://localhost:44379/api/cities", {
+            params: { cities: values },
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        .then(function(response) {
+            cb(response.data.annualTemperatureLocationDTOs);
+        })
+        .catch(err => console.log(err));
     }
 
     handleCitySelect = (values) => {
-        const data = this.getData().filter(x => {
-            return values.includes(x.city);
-        })
-        this.setState({ selectedCities: values, data });
+        this.getData(values, data => {
+            this.setState({ selectedCities: values, data });
+        });
     };
 
     
@@ -95,7 +62,7 @@ class CitiesPage extends React.Component {
         return (
             <React.Fragment>
                 <Paper style={{padding: '10px', margin: '10px 0'}}>
-                    <Typography variant="h2">Avg temperature by cities</Typography>
+                    <h2>Avg temperature by cities</h2>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                             <MultipleSelect

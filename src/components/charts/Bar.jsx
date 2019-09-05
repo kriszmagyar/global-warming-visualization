@@ -18,7 +18,7 @@ class Bar extends React.Component {
                 const backgroundColor = index < backgroundColors.length ? backgroundColors[index] : '';
                 return {
                     label: city.city,
-                    data: city.values.map(x => x.celsius),
+                    data: city.annualTemperatureDTOs.map(x => x.temperature),
                     fill: false,
                     borderColor: backgroundColor,
                     backgroundColor
