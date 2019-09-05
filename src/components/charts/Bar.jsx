@@ -15,10 +15,11 @@ class Bar extends React.Component {
         const convertedData = {
             labels: years,
             datasets: data.map((city, index) => {
+                const backgroundColor = index < backgroundColors.length ? backgroundColors[index] : '';
                 return {
                     label: city.city,
                     data: city.values.map(x => x.celsius),
-                    backgroundColor: backgroundColors[index]
+                    backgroundColor
                 }
             })
         };

@@ -1,6 +1,10 @@
 import React from "react";
 import Bar from "../components/charts/Bar";
 import { MultipleSelect } from "react-select-material-ui";
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+import '../assets/css/slider.css';
+import Grid from '@material-ui/core/Grid';
 
 class StationPage extends React.Component {
 
@@ -76,26 +80,36 @@ class StationPage extends React.Component {
     };
 
     
-    handleYearChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
+    onSliderChange = (value) => {
+        this.setState({
+            minYear: value[0],
+            maxYear: value[1]
+        })
+    }
 
     render() {
         if (!this.state.init) return null;
-
         return (
             <React.Fragment>
                 <h2>Station</h2>
-                <MultipleSelect
-                    values={this.state.selectedCities}
-                    options={this.state.options}
-                    onChange={this.handleCitySelect}
-                    placeholder="Select a city..."
-                    SelectProps={{
-                        msgNoOptionsAvailable: "All cities are selected",
-                        msgNoOptionsMatchFilter: "No city name matches the filter"
-                    }}
-                />
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6}>
+                        <MultipleSelect
+                            values={this.state.selectedCities}
+                            options={this.state.options}
+                            onChange={this.handleCitySelect}
+                            placeholder="Select a city..."
+                            SelectProps={{
+                                msgNoOptionsAvailable: "All cities are selected",
+                                msgNoOptionsMatchFilter: "No city name matches the filter"
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <label>Year select</label>
+                        <Slider.Range min={1975} max={1980} value={[this.state.minYear, this.state.maxYear]} onChange={this.onSliderChange} />
+                    </Grid>
+                </Grid>
                 <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} />
             </React.Fragment>
         );
