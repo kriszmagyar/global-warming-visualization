@@ -15,6 +15,7 @@ class WorldPage extends React.Component {
             intervalId: ""
         };
         this.startYearCounting = this.startYearCounting.bind(this);
+        this.resetYearCounting = this.resetYearCounting.bind(this);
         this.timer = this.timer.bind(this);
     }
 
@@ -66,12 +67,20 @@ class WorldPage extends React.Component {
         this.setState({ intervalId });
     }
 
+    resetYearCounting() {
+        clearInterval(this.state.intervalId);
+        this.setState({ year: 1975 })
+    }
+
     render() {
         if (!this.state.init) return "Loading...";
         return (
             <React.Fragment>
                 <World data={this.state.data} />
-                <Button variant="contained" color="primary" style={{marginTop: "-20px"}} onClick={() => this.startYearCounting()}>Start</Button>
+                <div style={{marginTop: "-20px"}}>
+                    <Button variant="contained" color="primary" onClick={() => this.startYearCounting()}>Start</Button>
+                    <Button variant="contained" color="secondary" style={{marginLeft: "10px"}} onClick={() => this.resetYearCounting()}>Reset</Button>
+                </div>
                 <Slider min={1975} max={1980} value={this.state.year} onChange={this.onSliderChange} />
                 <Typography variant="h6">{this.state.year}</Typography>
             </React.Fragment>
