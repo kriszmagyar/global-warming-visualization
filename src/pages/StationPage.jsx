@@ -10,33 +10,77 @@ class StationPage extends React.Component {
             init: false,
             data: [],
             selectedCities: ["Budapest"],
-            options: ["New York", "London", "Vienna", "Budapest"]
+            options: ["New York", "London", "Vienna", "Budapest"],
+            minYear: 1975,
+            maxYear: 1980
         };
     }
 
     componentDidMount() {
-        const data = this.getData();
+        const data = this.getData().filter(x => {
+            return this.state.selectedCities.includes(x.city);
+        });
         this.setState({ data, init: true });
     }
 
     getData() {
 
-        return [
-            { year: 1975, budapest: 30, london: 25, vienna: 29, newyork: 20 },
-            { year: 1976, budapest: 32, london: 25, vienna: 29, newyork: 20 },
-            { year: 1977, budapest: 34, london: 25, vienna: 29, newyork: 20 },
-            { year: 1978, budapest: 31, london: 25, vienna: 29, newyork: 20 },
-            { year: 1979, budapest: 29, london: 25, vienna: 29, newyork: 20 },
-            { year: 1980, budapest: 25, london: 25, vienna: 29, newyork: 20 }
-        ]
+        return [{
+            city: "Budapest",
+            values: [
+                { year: 1975, celsius: 30 },
+                { year: 1976, celsius: 32 },
+                { year: 1977, celsius: 34 },
+                { year: 1978, celsius: 31 },
+                { year: 1979, celsius: 29 },
+                { year: 1980, celsius: 25 }
+            ]
+        }, {
+            city: "London",
+            values: [
+                { year: 1975, celsius: 30 },
+                { year: 1976, celsius: 32 },
+                { year: 1977, celsius: 34 },
+                { year: 1978, celsius: 31 },
+                { year: 1979, celsius: 29 },
+                { year: 1980, celsius: 25 }
+            ]
+        }, {
+            city: "Vienna",
+            values: [
+                { year: 1975, celsius: 30 },
+                { year: 1976, celsius: 32 },
+                { year: 1977, celsius: 34 },
+                { year: 1978, celsius: 31 },
+                { year: 1979, celsius: 29 },
+                { year: 1980, celsius: 25 }
+            ]
+        }, {
+            city: "New York",
+            values: [
+                { year: 1975, celsius: 30 },
+                { year: 1976, celsius: 32 },
+                { year: 1977, celsius: 34 },
+                { year: 1978, celsius: 31 },
+                { year: 1979, celsius: 29 },
+                { year: 1980, celsius: 25 }
+            ]
+        }]
     }
 
-    handleChange = (values) => {
-        this.setState({ selectedCities: values });
-      };
+    handleCitySelect = (values) => {
+        const data = this.getData().filter(x => {
+            return values.includes(x.city);
+        })
+        this.setState({ selectedCities: values, data });
+    };
+
+    
+    handleYearChange = name => event => {
+        this.setState({ [name]: event.target.value });
+    };
 
     render() {
-
         if (!this.state.init) return null;
 
         return (
@@ -45,14 +89,14 @@ class StationPage extends React.Component {
                 <MultipleSelect
                     values={this.state.selectedCities}
                     options={this.state.options}
-                    onChange={this.handleChange}
+                    onChange={this.handleCitySelect}
                     placeholder="Select a city..."
                     SelectProps={{
                         msgNoOptionsAvailable: "All cities are selected",
                         msgNoOptionsMatchFilter: "No city name matches the filter"
                     }}
                 />
-                <Bar data={this.state.data} selectedCities={this.state.selectedCities} />
+                <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} />
             </React.Fragment>
         );
     }

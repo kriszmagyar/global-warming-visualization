@@ -1,6 +1,5 @@
 import React from 'react';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import { Bar as BarChartJs } from 'react-chartjs-2';
 
 class Bar extends React.Component {
 
@@ -9,55 +8,40 @@ class Bar extends React.Component {
         this.state = {};
     }
 
-    componentDidMount() {
-        let chart = am4core.create("chartdiv", am4charts.XYChart);
-        chart.data = this.handleData();
-
-        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "year";
-
-        // eslint-disable-next-line
-        let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-        this.updateSeries(chart);
-    
-        this.chart = chart;
-    }
-
-    componentDidUpdate() {
-        this.chart.data = this.props.data;
-      }
-
-    componentWillUnmount() {
-        if (this.chart) {
-            this.chart.dispose();
-        }
-    }
-
-    handleData() {
-        return this.props.data;
-    }
-
-    updateSeries(chart) {
-        this.props.selectedCities.forEach(city => {
-            let series1 = chart.series.push(new am4charts.ColumnSeries());
-            series1.dataFields.valueY = this.formatCityName(city);
-            series1.dataFields.categoryX = "year";
-            series1.name = city;
-            series1.columns.template.tooltipText = city + ": [bold]{valueY}[/] C°";
-        });
-    }
-
-    formatCityName(name) {
-        return name.replace(" ", "").toLowerCase();
-    }
-
     render() {
+        const { data, minYear, maxYear } = this.props;
+        const years = Array.from(new Array(maxYear - minYear + 1), (x,i) => i + minYear);
+
+        const convertedData = {
+            labels: years,
+            datasets: data.map((city, index) => {
+                return {
+                    label: city.city,
+                    data: city.values.map(x => x.celsius),
+                    backgroundColor: backgroundColors[index]
+                }
+            })
+        };
+
+        const options = {};
+
         return (
-            <div id="chartdiv" style={{ width: "100%", height: "590px" }}></div>
+            <BarChartJs data={convertedData} options={options} />
         );
     }
-
 }
+
+const backgroundColors = [
+    'rgba(200, 50, 50, 0.8)',
+    'rgba(60, 260, 60, 0.8)',
+    'rgba(70, 70, 270, 0.8)',
+    'rgba(80, 80, 80, 0.8)',
+    'rgba(90, 90, 90, 0.8)',
+    'rgba(100, 100, 100, 0.8)',
+    'rgba(110, 110, 110 0.8)',
+    'rgba(120, 120, 120, 0.8)',
+    'rgba(120, 50, 50, 0.8)',
+    'rgba(160, 160, 160, 0.8)'
+]
 
 export default Bar;
