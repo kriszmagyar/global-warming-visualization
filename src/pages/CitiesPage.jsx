@@ -6,6 +6,8 @@ import 'rc-slider/assets/index.css';
 import '../assets/css/slider.css';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import config from "../config";
+import Typography from '@material-ui/core/Typography';
 
 class CitiesPage extends React.Component {
 
@@ -16,8 +18,8 @@ class CitiesPage extends React.Component {
             data: [],
             selectedCities: ["Budapest"],
             options: ["New York", "London", "Vienna", "Budapest"],
-            minYear: 1975,
-            maxYear: 1980
+            minYear: config.MIN_YEAR,
+            maxYear: config.MAX_YEAR
         };
     }
 
@@ -93,7 +95,7 @@ class CitiesPage extends React.Component {
         return (
             <React.Fragment>
                 <Paper style={{padding: '10px', margin: '10px 0'}}>
-                    <h2>Avg temperature by cities</h2>
+                    <Typography variant="h2">Avg temperature by cities</Typography>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                             <MultipleSelect
@@ -109,7 +111,7 @@ class CitiesPage extends React.Component {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <label>Year select</label>
-                            <Slider.Range min={1975} max={1980} value={[this.state.minYear, this.state.maxYear]} onChange={this.onSliderChange} />
+                            <Slider.Range min={config.MIN_YEAR} max={config.MAX_YEAR} value={[this.state.minYear, this.state.maxYear]} onChange={this.onSliderChange} />
                         </Grid>
                     </Grid>
                     <Grid container spacing={2} style={{margin: "20px 0"}}>

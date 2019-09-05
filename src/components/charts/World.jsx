@@ -3,6 +3,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
+import config from '../../config';
 
 class World extends React.Component {
 
@@ -19,16 +20,11 @@ class World extends React.Component {
 
         // Country lines
         var polygonTemplate = worldSeries.mapPolygons.template;
-        // polygonTemplate.tooltipText = "{name}";
         polygonTemplate.fill = am4core.color("#3f51b5");
         polygonTemplate.opacity = 0.3;
         polygonTemplate.stroke = am4core.color("#fff");
         polygonTemplate.strokeWidth = 1;
         polygonTemplate.nonScalingStroke = true;
-
-        // Hover effect
-        // var hs = polygonTemplate.states.create("hover");
-        // hs.properties.fill = am4core.color("#367B25");
 
         // Background color
         chart.backgroundSeries.mapPolygons.template.polygon.fill = am4core.color("#aadaff");
@@ -51,15 +47,15 @@ class World extends React.Component {
             property: "fill",
             min: am4core.color("#082284"),
             max: am4core.color("#f54029"),
-            minValue: -30,
-            maxValue: 50
+            minValue: config.MIN_TEMPERATURE,
+            maxValue: config.MAX_TEMPERATURE
         });
 
         let heatLegend = chart.createChild(am4charts.HeatLegend);
         heatLegend.series = imageSeries;
         heatLegend.orientation = "vertical";
-        heatLegend.minValue = -30;
-        heatLegend.maxValue = 50;
+        heatLegend.minValue = config.MIN_TEMPERATURE;
+        heatLegend.maxValue = config.MAX_TEMPERATURE;
 
         imageSeries.data = this.props.data;
 

@@ -3,6 +3,7 @@ import World from '../components/charts/World';
 import Slider from 'rc-slider';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
+import config from "../config";
 
 class WorldPage extends React.Component {
 
@@ -11,7 +12,7 @@ class WorldPage extends React.Component {
         this.state = {
             init: false,
             data: [],
-            year: 1975,
+            year: config.MIN_YEAR,
             intervalId: ""
         };
         this.startYearCounting = this.startYearCounting.bind(this);
@@ -55,9 +56,9 @@ class WorldPage extends React.Component {
 
     timer() {
         this.setState((prevState) => ({
-           year: Math.min(prevState.year + 1, 1980) 
+           year: Math.min(prevState.year + 1, config.MAX_YEAR) 
         }))
-        if (this.state.year === 1980) {
+        if (this.state.year === config.MAX_YEAR) {
             clearInterval(this.state.intervalId);
         }
     }
@@ -69,7 +70,7 @@ class WorldPage extends React.Component {
 
     resetYearCounting() {
         clearInterval(this.state.intervalId);
-        this.setState({ year: 1975 })
+        this.setState({ year: config.MIN_YEAR })
     }
 
     render() {
@@ -81,7 +82,7 @@ class WorldPage extends React.Component {
                     <Button variant="contained" color="primary" onClick={() => this.startYearCounting()}>Start</Button>
                     <Button variant="contained" color="secondary" style={{marginLeft: "10px"}} onClick={() => this.resetYearCounting()}>Reset</Button>
                 </div>
-                <Slider min={1975} max={1980} value={this.state.year} onChange={this.onSliderChange} />
+                <Slider min={config.MIN_YEAR} max={config.MAX_YEAR} value={this.state.year} onChange={this.onSliderChange} />
                 <Typography variant="h6">{this.state.year}</Typography>
             </React.Fragment>
         )
