@@ -4,6 +4,7 @@ import Slider from 'rc-slider';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import config from "../config";
+import { getRequest } from '../axios';
 
 class WorldPage extends React.Component {
 
@@ -17,47 +18,37 @@ class WorldPage extends React.Component {
         };
         this.startYearCounting = this.startYearCounting.bind(this);
         this.resetYearCounting = this.resetYearCounting.bind(this);
+        this.onSliderChange = this.onSliderChange.bind(this);
+        this.getData = this.getData.bind(this);
         this.timer = this.timer.bind(this);
     }
 
     componentDidMount() {
-        const data = this.getData();
-        this.setState({ data, init: true });
+        this.getData(this.state.year, data => {
+            this.setState({ data: data.cityTempDTOs, init: true });
+        });
     }
 
     componentWillUnmount() {
         clearInterval(this.state.intervalId);
     }
 
-    getData() {
-        return [{
-            "latitude": 48.856614,
-            "longitude": 2.352222,
-            "city": "Paris",
-            "value": 30
-          }, {
-            "latitude": 40.712775,
-            "longitude": -74.005973,
-            "city": "New York",
-            "value": 10
-          }, {
-            "latitude": 49.282729,
-            "longitude": -123.120738,
-            "city": "Vancouver",
-            "value": 50
-        }];
+    getData(year, cb) {
+        getRequest("/temperatures", { year }, cb);
     }
 
     onSliderChange (value) {
-        this.setState({
-            year: value
-        })
+        this.getData(value, data => {
+            this.setState({
+                year: value,
+                data: data.cityTempDTOs
+            })
+        });
     }
 
     timer() {
-        this.setState((prevState) => ({
-           year: Math.min(prevState.year + 1, config.MAX_YEAR) 
-        }))
+        const nextYear = Math.min(this.state.year + 1, config.MAX_YEAR);
+        this.onSliderChange(nextYear);
         if (this.state.year === config.MAX_YEAR) {
             clearInterval(this.state.intervalId);
         }
