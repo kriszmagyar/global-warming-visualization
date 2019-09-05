@@ -79,7 +79,7 @@ class World extends React.Component {
     
     render() {
         return (
-            <div id="worldDiv" style={{ width: "100%", height: "620px", marginTop: "10px" }}></div>
+            <div id="worldDiv" style={{ width: "100%", height: "600px", marginTop: "10px" }}></div>
         );
     }
 }
