@@ -7,8 +7,7 @@ import '../assets/css/slider.css';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import config from "../config";
-import axios from "axios";
-import qs from "qs";
+import { getRequest } from "../axios";
 
 class CitiesPage extends React.Component {
 
@@ -18,7 +17,7 @@ class CitiesPage extends React.Component {
             init: false,
             data: [],
             selectedCities: ["Budapest"],
-            options: ["New York", "London", "Vienna", "Budapest", "Warsaw"],
+            options: config.availableCities,
             minYear: config.MIN_YEAR,
             maxYear: config.MAX_YEAR
         };
@@ -26,29 +25,19 @@ class CitiesPage extends React.Component {
 
     componentDidMount() {
         this.getData(this.state.selectedCities, data => {
-            this.setState({ data, init: true });
+            this.setState({ data: data.annualTemperatureLocationDTOs, init: true });
         });
     }
 
     getData(values, cb) {
-        axios.get("https://localhost:44379/api/cities", {
-            params: { cities: values },
-            paramsSerializer: params => {
-                return qs.stringify(params)
-            }
-        })
-        .then(function(response) {
-            cb(response.data.annualTemperatureLocationDTOs);
-        })
-        .catch(err => console.log(err));
+        getRequest("/cities", { cities: values }, cb);
     }
 
     handleCitySelect = (values) => {
         this.getData(values, data => {
-            this.setState({ selectedCities: values, data });
+            this.setState({ selectedCities: values, data: data.annualTemperatureLocationDTOs });
         });
     };
-
     
     onSliderChange = (value) => {
         this.setState({
