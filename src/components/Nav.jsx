@@ -29,6 +29,9 @@ function Nav() {
                     <Button color="inherit">
                         <Link to="/cities">Cities</Link>
                     </Button>
+                    <Button color="inherit">
+                        <Link to="/world">World</Link>
+                    </Button>
                 </Toolbar>
             </AppBar>
         </div>

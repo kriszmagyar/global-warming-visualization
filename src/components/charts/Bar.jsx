@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar as BarChartJs } from 'react-chartjs-2';
+import { Line as LineChartJs, Bar as BarChartJs } from 'react-chartjs-2';
 
 class Bar extends React.Component {
 
@@ -9,7 +9,7 @@ class Bar extends React.Component {
     }
 
     render() {
-        const { data, minYear, maxYear } = this.props;
+        const { data, minYear, maxYear, type } = this.props;
         const years = Array.from(new Array(maxYear - minYear + 1), (x,i) => i + minYear);
 
         const convertedData = {
@@ -19,6 +19,8 @@ class Bar extends React.Component {
                 return {
                     label: city.city,
                     data: city.values.map(x => x.celsius),
+                    fill: false,
+                    borderColor: backgroundColor,
                     backgroundColor
                 }
             })
@@ -35,19 +37,20 @@ class Bar extends React.Component {
             }
         };
 
-        return (
-            <BarChartJs data={convertedData} options={options} />
-        );
+        switch(type) {
+            case 'line': return <LineChartJs data={convertedData} options={options} />
+            default: return <BarChartJs data={convertedData} options={options} />
+        }
     }
 }
 
 const backgroundColors = [
-    'rgba(200, 50, 50, 0.8)',
+    'rgba(63, 81, 181, 0.8)',
     'rgba(60, 260, 60, 0.8)',
     'rgba(70, 70, 270, 0.8)',
-    'rgba(80, 80, 80, 0.8)',
-    'rgba(90, 90, 90, 0.8)',
-    'rgba(100, 100, 100, 0.8)',
+    'rgba(280, 80, 80, 0.8)',
+    'rgba(90, 190, 90, 0.8)',
+    'rgba(100, 160, 100, 0.8)',
     'rgba(110, 110, 110 0.8)',
     'rgba(120, 120, 120, 0.8)',
     'rgba(120, 50, 50, 0.8)',

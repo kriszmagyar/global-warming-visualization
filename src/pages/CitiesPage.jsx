@@ -89,7 +89,7 @@ class CitiesPage extends React.Component {
     }
 
     render() {
-        if (!this.state.init) return null;
+        if (!this.state.init) return "Loading...";
         return (
             <React.Fragment>
                 <Paper style={{padding: '10px', margin: '10px 0'}}>
@@ -112,7 +112,14 @@ class CitiesPage extends React.Component {
                             <Slider.Range min={1975} max={1980} value={[this.state.minYear, this.state.maxYear]} onChange={this.onSliderChange} />
                         </Grid>
                     </Grid>
-                    <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} />
+                    <Grid container spacing={2} style={{margin: "20px 0"}}>
+                        <Grid item xs={12} sm={6}>
+                            <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} type="bar" />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Bar data={this.state.data} minYear={this.state.minYear} maxYear={this.state.maxYear} type="line" /> 
+                        </Grid>
+                    </Grid>
                 </Paper>
             </React.Fragment>
         );
